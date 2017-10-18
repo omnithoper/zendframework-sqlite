@@ -1,0 +1,102 @@
+<script type='text/javascript' src='/js/student_enroly.js'></script>
+<h1> Student Enrollment </h1>
+		<form action ="/enrollment" Method="POST">
+				<label>Student Name</label>
+			<?php if (empty($_SESSION['student_id'])): ?>		
+				Name:<input type="text" name="studentName">
+				<input type="submit" name="search" value="search">
+			<?php endif; ?>	
+				</br>	
+				<?php if (!empty($this->students[1]) && empty($selectedStudent)): ?>
+					<ul>
+
+						<?php foreach ($this->students as $student): ?>
+							<li>
+								<?php echo $student['last_name'].', '.$student['first_name']; ?>
+								<button type="submit">
+								(<a href="/enrollment?studentID=<?php echo $student['student_id']; ?>">select</a>)
+								</button>
+							</li>
+						<?php endforeach; ?>
+					</ul>
+				<?php endif; ?>
+			</form>
+			<form method="post">
+				<?php if (!empty($this->selectedStudent)) : ?>
+					<?php echo 'SELECTED NAME:'. $this->selectedStudent['last_name'].', '.$this->selectedStudent['first_name']; ?>
+					<br />
+					<h1>Enroll to Subject</h1>
+				
+					<input type="hidden" name="studentID" value="<?php echo $this->studentID; ?>" />
+					<select id="subject_list" name="getSubjectID" onchange="checkSubjectName();">		
+						<option value="">(Select Subject)</option>		
+							<?php foreach ($this->subject as $subjects):?>
+								<option value="<?php echo $subjects['subject_id']; ?>"> <?php echo $subjects['subject'];?></option>	
+							<?php endforeach;?>	
+					</select>	
+					<select id="list" name="blockSection" onchange="checkSubjectName();">
+						<option >(Select Block Section)</option>
+							<?php foreach ($this->bbSection as $details): ?>
+								<option 
+									value="<?php echo $details['block_section'].','.$details['semester_number']; ?>"><?php echo $details['block_section'].' - '.$details['semester_number']; ?>
+								</option>
+							<?php endforeach; ?> 	
+							</select>
+					<button id="button_save" type="submit" name="saveSubject" value="saveSubject" disabled>Save</button>
+			
+						<div class="alert alert-danger">
+							<?php if (!empty($this->error)): ?>		
+								<?php echo $this->error['error']; ?>
+								<?php echo $this->error['status']; ?>
+							<?php endif; ?>	
+						</div>
+
+			<?php endif; ?>
+			
+			<?php if (!empty($this->selectedStudent) && !empty($this->allSubject)): ?>
+				<h1><?php echo "Student Enroll Subjects";?></br></h1>
+				<br />
+				<table class="table table-bordered table-condensed table-striped"> 
+					<tr>
+						<th>Subject ID</th>
+						<th>Subject</th>
+						<th>Subject UNIT</th>
+					</tr>
+					<?php $totalUnit = NULL;?>
+					<?php foreach ($this->allSubject as $subject):?>
+						<tr>
+						<td><?php echo  $subject['subject_id']; ?></td>
+						<td><?php echo  $subject['subject']; ?></td>
+						<td><?php echo  $subject['subject_unit']; ?></td>
+						<td style="width: 1px; wrap: nowrap;">
+							<?php if (empty($this->viewBlockSection)): ?>		
+								<a 
+									href="/enrollment/?subjectID=<?php echo $subject['subject_id']; ?>
+									&studentID=<?php echo $subject['student_id']; ?>&action=delete" class="btn btn-danger" title="Delete Subject"><i class="glyphicon glyphicon-remove"></i>
+								</a>
+							<?php endif; ?>		
+						</td>		
+						</tr>
+					<?php endforeach; ?>
+						<tr>
+							<td colspan="2"><span class="pull-right">Total Units</span></td>
+							<td colspan="2">
+								<label for="Total"><?php echo $this->totalUnit;?></label>
+							</td>
+						</tr>		
+				</table>
+			
+					<?php if ($this->isStudentPayed == 0 || $this->isStudentPayed == 'NULL'): ?>
+						<a id="payment"  href="/Cashier/?studentID=<?php echo $this->studentID;?>&semesterID=<?php echo $this->semesterID;?>
+							&checkBlockSection=<?php echo $this->checkBlockSection;?>" 
+						class="btn btn-success pull-right"  title="payment"  >pay</a>
+						<div class="clearfix"></div>
+					<?php endif; ?>
+			<?php endif; ?>
+		</form>	
+		<footer>
+			<center>
+				copyright &copy Busasal.com
+			</center>
+		</footer>	
+	</div>		

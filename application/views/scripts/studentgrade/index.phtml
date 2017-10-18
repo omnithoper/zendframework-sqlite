@@ -1,0 +1,122 @@
+<script type='text/javascript' src='/js/student_grade.js'></script>
+
+
+		<div class="navbar">
+			<div class="navbar-inner">
+		
+				<form class="navbar-form pull-right">
+				  	<a type="button" class="btn" href="/index">return</a>
+				</form>
+			</div>
+		</div>
+		<form action ="/studentgrade" Method="POST">
+				<h1 id="firstH1"></h1>
+			<?php if (empty($_SESSION['student_id'])): ?>		
+				Name:<input type="text" name="studentName" id="test3">
+				<input type="submit" name="search" value="search">
+			<?php endif; ?>	
+				</br>	
+				<?php if (!empty($this->students[1]) && empty($selectedStudent)): ?>
+					<ul>
+
+						<?php foreach ($this->students as $student): ?>
+							<li>
+								<?php echo $student['last_name'].', '.$student['first_name']; ?>
+								<button type="submit">
+								(<a href="/studentgrade?studentID=<?php echo $student['student_id']; ?>">select</a>)
+								</button>
+							</li>
+						<?php endforeach; ?>
+					</ul>
+				<?php endif; ?>
+			</form>
+			<form method="post">
+				<?php if (!empty($this->selectedStudent)) : ?>
+					<?php echo 'SELECTED NAME:'. $this->selectedStudent['last_name'].', '.$this->selectedStudent['first_name']; ?>
+					<br />
+					
+			<?php endif; ?>
+			
+			<?php if (!empty($this->selectedStudent) && !empty($this->allSubject)): ?>
+				<h1><?php echo "Student Enroll Subjects";?></br></h1>
+				<br />
+				<div class="studentGrade-ajax">
+				</div>
+
+				<table class="table table-bordered table-condensed table-striped"> 
+					<tr>
+						<th>Subejct ID</th>
+						<th>Subject</th>
+						<th>Subject UNIT</th>
+						<th>Midterm Grade</th>
+						<th>final Grade</th>
+						<th>Total Grade</th>
+						<th>Details</th>
+						<th>Edit</th>
+					</tr>
+					<?php $totalUnit = NULL;?>
+					<?php foreach ($this->allSubject as $subject):?>
+						<tr>
+						<td><?php echo  $subject['subject_id']; ?></td>
+						<td><?php echo  $subject['subject']; ?></td>
+						<td><?php echo  $subject['subject_unit']; ?></td>
+						<td id = "midTerm" name="midTerm"><?php echo  $subject['mid_term']; ?></td>
+						<td id = "finalTerm" name="finalterm"><?php echo  $subject['final_term']; ?></td>
+						<td id = "totalGrade" name="totalGrade" <?php echo  $subject['total_grade']; ?></td>
+						<td style="width: 1px; wrap: nowrap;">
+							<a 
+								onclick="viewDetails(<?php echo $subject['student_id'].', '. $subject['subject_id'].','.$subject['semester_id']; ?>);" 
+								class="btn" 
+								title="edit Student"
+								data-toggle="modal" data-target="#studentGrade-details"
+								> 
+								<i class="glyphicon glyphicon-search"></i>
+							</a>	
+						</td>
+						<td style="width: 1px; wrap: nowrap;">							
+							<a 
+								href="/studentgrade/edit?subjectID=<?php echo $subject['subject_id']; ?>&semesterID=<?php echo $subject['semester_id']; ?>
+								&studentID=<?php echo $subject['student_id']; ?>&action=edit" class="btn btn-success" title="Delete Subject"><i class="glyphicon glyphicon-edit"></i></a>
+						</td>		
+						</tr>
+					<?php endforeach; ?>
+				<?php endif; ?>
+		</form>	
+		<footer>
+			<center>
+				copyright &copy Busasal.com
+			</center>
+		</footer>	
+	</div>		
+</nav>
+
+	<div id="studentGrade-details" class="modal fade" role="dialog">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h4 class="modal-title">Student Grade Details</h4>
+		      </div>
+		      <div class="modal-body">
+
+		
+		        <dl>
+
+		        	<dt>studentID</dt><dd id="studentID"></dd>
+		        	<dt>Midterm Grade</dt><dd id="midterm"></dd>
+		        	<dt>Final Grade</dt><dd id="finalterm"></dd>
+		        	<dt>Total Grade</dt><dd id="totalGrade"></dd>
+		        </dl>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default btn-danger" data-dismiss="modal">	<i class="glyphicon glyphicon-remove"></i></button>
+		      </div>
+		    </div>
+
+		  </div>
+
+ <script type="text/javascript">
+	function myFunction() {
+		$("#firstH1").attr("style", "color:red").html("Student Name")
+	}
+	$(document).ready(myFunction);
+</script>

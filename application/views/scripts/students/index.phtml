@@ -1,0 +1,178 @@
+	
+    <script type="text/javascript" src="/js/students.js"></script>
+		<h1>Students Records</h1>
+			<div class="col-md-6">
+			
+				<?php if (empty($this->students)): ?>
+					<div class="alert alert-info">No students yet</div>
+				<?php else: ?>
+
+					<div id="student-pagination" class="pagination">
+					  <ul class="pagination">
+					    <li><a href="/students/index?page=<?php echo $this->currentPage <= 1?$this->currentPage = 1:$this->currentPage-1; ?>">Prev</a></li>
+					    <?php for ($pageNumber = 1; $pageNumber <= Student::getNumberOfPages($this->studentsCount); $pageNumber++) { ?>
+					    	<li class="<?php echo ($pageNumber == $this->currentPage)?'active':'';?>"><a href="/students/index?page=<?php echo $pageNumber; ?>"><?php echo $pageNumber; ?></a></li>
+					    <?php } ?>
+					    <li><a href="/students/index?page=<?php echo ($this->currentPage >= Student::getNumberOfPages($this->studentsCount))?$this->currentPage:$this->currentPage+1; ?>">Next</a></li>
+					  </ul>
+					</div>
+
+					<div>
+						<a  
+							class="pull-right btn btn-success" 
+							title="Add Student"
+							data-toggle="modal" data-target="#student-add"> 
+							<i class="glyphicon glyphicon-plus"></i>
+						</a>
+					</div>	
+
+					<table class="table table-bordered table-condensed table-striped"> 
+						<p id="delete"></p>
+						<thead class="tHeader">
+						<tr>
+							<th>ID</th>
+							<th>FirstName</th>
+							<th>LastName</th>
+							<th>Status</th>
+							<th>Actions</th>
+						</tr>
+						</thead>
+						<?php foreach ($this->students as $details): ?>
+							<tr>
+							<td align="center"><?php echo $details['student_id']; ?></td>
+							<td align="center"><?php echo $details['first_name']; ?></td>
+							<td	align="center"><?php echo $details['last_name']; ?></td>
+							<td align="center"><?php echo $details['payed']; ?></td>
+							<td style="width: 1px; white-space: nowrap;" nowrap>
+								<a 
+									onclick="viewDetails(<?php echo $details['student_id']; ?>);" 
+									class="btn" 
+									title="View Student"
+									data-toggle="modal" data-target="#student-details"
+									> 
+									<i class="glyphicon glyphicon-search"></i>
+								</a>	
+
+								<!--<a href="/students/edit?student_id=<?php echo $details['student_id']; ?>" class="btn" title="edit Student"> -->
+								<a 
+									onclick="editStudent(<?php echo $details['student_id']; ?>)" 
+									class="btn" 
+									title="edit Student"
+									data-toggle="modal" data-target="#student-edit"
+									> 
+									<i class="glyphicon glyphicon-edit"></i>
+								</a>
+
+								<a id="href_delete" href='/students/delete?student_id=<?php echo $details['student_id']; ?>' 
+							class="btn btn-danger" title="Delete Student"> 
+									<i class="glyphicon glyphicon-remove"></i>
+								</a>
+
+							<?php	if ($details['payed'] == 'paid'): ?>
+									<a id="href_delete"href='/students/download?student_id=<?php echo $details['student_id']; ?>' 
+									class="btn btn-success" title="download invoice"> 
+										<i class="glyphicon glyphicon-download"></i>
+									</a>
+								<?php endif; ?>
+							</td>
+							</tr>
+						<?php endforeach; ?>
+					</table>
+
+				<?php endif ?>
+		
+			</div>
+			<div class="col-md-6">
+					<h1>
+					    <label class="label label-info">This is where you can view, edit, delete student </label>
+					    <br></br>
+					    <img id = "student-img" class="second-slide" src="/img/student.jpg" alt="Second slide">
+					</h1>
+			</div>
+		<div id="student-details" class="modal fade" role="dialog">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h4 class="modal-title">Student Details</h4>
+		      </div>
+		      <div class="modal-body">
+		      	<h1> Student  Details </h1>
+
+		        <dl>
+		        	<dt><label class="modal-label"> Student ID : </label></dt><dd><input type="text" disabled id="studentID" /></dd>
+		        	<dt><label class="modal-label"> First Name : </label></dt><dd><input type="text" disabled id="unang_pangalan" /></dd>	
+		        	<dt><label class="modal-label"> Last  Name : </label></dt><dd><input type="text" disabled id="apilido" /></dd>	
+		        </dl>
+		      </div>
+		      <div class="modal-footer"> 
+		        <button type="button" class="btn btn-default btn-danger" data-dismiss="modal">	<i class="glyphicon glyphicon-remove"></i></button>
+		      </div>
+		    </div>
+
+		  </div>
+		</div>
+
+
+	<div id="student-edit" class="modal fade" role="dialog">
+
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h4 class="modal-title">Student Edit</h4>
+		      </div>
+
+
+			  	<div class="modal-body">
+			      <h1> Student Edit </h1>
+				      <dl>
+				      	<dt><label class="modal-label"> Student ID : </label></dt><input disabled type="text" id="editStudentID" /></dd>
+				      	<dt><label class="modal-label"> First Name : </label></dt><dd><input type="text" id="editFirstName" /></dd>		
+				      	<dt><label class="modal-label"> Last  Name : </label></dt><dd><input type="text" id="editLastName" /></dd>		
+				      	<dt><label class="modal-label"> User  Name : </label></dt><dd><input id="editUserName" /></dd>		
+				      	<dt><label class="modal-label"> Password   : </label></dt><dd><input id="editPassword" /></dd>		
+				      </dl>
+
+				</div>
+		      <div class="modal-footer">
+		      	<button data-dismiss="modal" class="btn btn-default" id="button_save" type="submit" name="edit" value="save" onclick="updateStudent()">save</button>
+		        <button type="button" class="btn btn-default btn-danger" data-dismiss="modal">	<i class="glyphicon glyphicon-remove"></i></button>
+		      </div>
+		    </div>
+
+		  </div>
+		
+	</div>
+
+	<div id="student-add" class="modal fade" role="dialog">
+
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h4 class="modal-title">Student Add</h4>
+		      </div>
+		      <div class="modal-body">
+		      	<h1> student Add </h1>
+
+		        <dl>
+		        	<dt><label class="modal-label">First Name :</label></dt><dd><input type="text" id="addFirstName" /></dd>
+		        	<dt><label class="modal-label">Last Name  :</label></dt><dd><input type="text" id="addLastName" /></dd>
+		        	<dt><label class="modal-label">User Name  :</label></dt><dd><input type="text" id="addUserName" /></dd>
+		        	<dt><label class="modal-label">Password   :</label></dt><dd><input type="text" id="addPassword" /></dd>
+		        </dl>
+		      </div>
+		      <div class="modal-footer">
+		      	<button data-dismiss="modal" class="btn btn-default" id="button_save" type="submit" name="edit" value="save" onclick="addStudent()">save</button>
+		        <button type="button" class="btn btn-default btn-danger" data-dismiss="modal">	<i class="glyphicon glyphicon-remove"></i></button>
+		      </div>
+		    </div>
+
+		  </div>
+		
+	</div>
+
+						<div class="alert alert-danger">
+							<?php if (!empty($this->error)): ?>		
+								<?php echo $this->error['error']; ?>
+							<?php endif; ?>	
+						</div>
+

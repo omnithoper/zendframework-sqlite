@@ -1,0 +1,42 @@
+
+<script src="/js/admin.js"></script>
+	<h1>Block Section Subject Match Records</h1>
+
+	<form>
+		<a class="pull-right btn btn-success" 
+			href="/bsectionsubject/add">
+		<i class="glyphicon glyphicon-plus"></i></a>
+	</form>
+		<table class="table table-bordered table-condensed table-striped">
+			
+			<tr>
+				<th>Subject</th>
+				<th>Lec Unit</th>
+				<th>Lab Unit</th>
+				<th>Subject Unit</th>
+				<th>edit </th>
+				<th>delete</th>
+			</tr>
+				<?php foreach ($this->BsectionSubject as $details):?>
+				<tr>
+				<td align="center"><?php echo $details['subject']; ?></td>
+				<td align="center"><?php echo $details['lec_unit']; ?></td>
+				<td align="center"><?php echo $details['lab_unit']; ?></td>
+				<td align="center"><?php echo $details['subject_unit']; ?></td>
+				<td style="width: 1px; wrap: nowrap;">
+					<a href="/bsectionsubject/edit?bSectionID=<?php echo $details['subject']; ?>" 
+				   		class="btn" 
+				   		title="edit blocksection"> 
+				   		<i class="glyphicon glyphicon-edit"></i>
+					</a>
+				</td>					
+				<td style="width: 1px; wrap: nowrap;">			
+					<a href='/bsectionsubject/delete?bSection=<?php echo $details['subject']; ?>&semesterNumber=<?php echo $details['subject_unit']; ?>' 
+						class="btn btn-danger" title="blocksection"> 
+						<i class="glyphicon glyphicon-remove"></i>
+					</a>
+				</td>	
+
+			</tr>
+			<?php endforeach;?>
+		</table>	

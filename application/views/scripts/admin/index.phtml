@@ -1,0 +1,83 @@
+
+  <script src="/js/admin.js"></script>
+  <h1>Admin Records</h1>
+ 	<div class="col-md-6">
+		<table class="table table-bordered table-condensed table-striped">
+			<a class="pull-right btn btn-success" 
+			href="/Admin/add">
+			<i class="glyphicon glyphicon-plus"></i></a>
+			<thead class="tHeader">
+				<tr>
+					<th>User_id</th>
+					<th>User Name</th>
+					<th>Password</th>
+					<th>Details</th>
+					<th>Edit</th>
+					<th>Delete</th>
+				</tr>
+			</thead>	
+				<?php foreach ($this->admin as $details):?>
+				<tr>
+				<td align="center"><?php echo $details['user_id']; ?></td>
+				<td align="center"><?php echo $details['username']; ?></td>
+				<td align="center"><?php echo $details['password']; ?></td>
+				<td>	
+					<a 
+						onclick="viewDetails(<?php echo $details['user_id']; ?>);" 
+						class="btn" 
+						title="edit Student"
+						data-toggle="modal" data-target="#admin-details"> 
+						<i class="glyphicon glyphicon-search"></i>
+					</a>
+				</td>
+				<td style="width: 1px; wrap: nowrap;">
+					<a href="/Admin/edit?user_id=<?php echo $details['user_id']; ?>" 
+				   		class="btn" 
+				   		title="edit Admin"> 
+				   		<i class="glyphicon glyphicon-edit"></i>
+					</a>
+				</td>					
+				<td style="width: 1px; wrap: nowrap;">			
+					<a href='/Admin/delete?user_id=<?php echo $details['user_id']; ?>' 
+						class="btn btn-danger" title="Admin"> 
+						<i class="glyphicon glyphicon-remove"></i>
+					</a>
+				</td>
+
+				</tr>
+			<?php endforeach;?>
+		</table>	
+	</div>
+	<div class="col-md-6">
+			<h1>
+			    <label class="label label-info">This is where you can view, edit, delete admin </label>
+			</h1>
+	</div>
+<div id="admin-details" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Admin Details</h4>
+      </div>
+      <div class="modal-body">
+        <dl>
+        	<dt><label class="modal-label">Admin ID: </label></dt><dd><input type="text" disabled id="adminID" /></dd>
+        	<dt><label class="modal-label">Admin User Name: </label><dd></dt><input type="text" disabled id="adminUser" /></dd>
+        	<dt><label class="modal-label">Admin Password: </label></dt><dd><input type="text" disabled id="adminPass" /></dd>
+        </dl>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-danger" data-dismiss="modal"><i class="glyphicon glyphicon-remove"></i></button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+	
+
