@@ -9,6 +9,23 @@ class Admin extends BaseModel {
 		
 		return $this->_db->fetchAll($select);
 	}
+
+	public function getViewSqliteAdmin() {
+		$stmt = $this->_dbs->query("SELECT * FROM admin");
+
+        $records = [];
+        while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+            $records[] = [
+            	'user_id'  => $row['user_id'],
+                'username' => $row['username'],
+                'password' => $row['password']
+            ];
+       
+        }
+        return $records;
+		
+	}
+
 	public function getAdminDetails($adminID) {
 		$select = $this->_db->select()
 			->from($this->_name)

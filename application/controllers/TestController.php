@@ -17,8 +17,12 @@ class TestController extends Zend_Controller_Action {
 	}
 	
 
-    public function resumeAction() {
-    	
+    public function sqliteAction() {
+    	$admin = new Admin();
+		$records = $admin->getViewSqliteAdmin();
+		Zend_Debug::dump($records);
+		die("here");
+		$this->view->admin = $records;
     }
 
 	public function googleAction(){

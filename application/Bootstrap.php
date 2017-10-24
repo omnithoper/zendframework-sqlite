@@ -12,8 +12,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 			$config->merge($config_extended);
 		}
 		
+		$dbs  = new PDO('sqlite:/home/anthony/student_subjects.db') or die("cannot open the database");
 	    $db = Zend_Db::factory('Pdo_Mysql', $config->resources->db->params->toArray());
+
 	    Zend_Registry::set('db', $db);
+	    Zend_Registry::set('dbs', $dbs);
 	    Zend_Registry::set('config', $config);
 	}
 
